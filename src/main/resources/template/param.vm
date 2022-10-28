@@ -1,0 +1,539 @@
+package $!{table.getParamClassPackageName()};
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+#foreach($type in $columnPackageList)
+import $!{type};
+#end
+
+/**
+ * 本类通过 Sissi Studio Mybatis Generator 生成
+ * @author sissi.generator 
+ */
+public class $!{table.getParamClassName()} {
+    /**
+     *
+     */
+    protected String orderByClause;
+
+    /**
+     *
+     */
+    protected boolean distinct;
+
+    /**
+     *
+     */
+    protected boolean page;
+
+    /**
+     *
+     */
+    protected int pageIndex;
+
+    /**
+     *
+     */
+    protected int pageSize;
+
+    /**
+     *
+     */
+    protected int pageStart;
+
+    /**
+     *
+     */
+    protected String distinctSql;
+
+    /**
+     *
+     */
+    protected List<Criteria> orderCriteria;
+
+    /**
+     */
+    public $!{table.getParamClassName()}() {
+        orderCriteria = new ArrayList<Criteria>();
+    }
+
+    /**
+     * @param orderCondition
+     * @param sortType
+     * @return
+     */
+    public $!{table.getParamClassName()} appendOrderByClause(OrderCondition orderCondition, SortType sortType) {
+        if (null != orderByClause) {
+            orderByClause = orderByClause + ", " + orderCondition.getColumnName() + " " + sortType.getValue();
+        } else {
+            orderByClause = orderCondition.getColumnName() + " " + sortType.getValue();
+        }
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public String getOrderByClause() {
+        return orderByClause;
+    }
+
+    /**
+     * @param distinct
+     */
+    public void setDistinct(boolean distinct) {
+        this.distinct = distinct;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isDistinct() {
+        return distinct;
+    }
+
+    /**
+     * @param page
+     * @return
+     */
+    public $!{table.getParamClassName()} setPage(boolean page) {
+        this.page = page;
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isPage() {
+        return page;
+    }
+
+    /**
+     * @return
+     */
+    public int getPageIndex() {
+        return pageIndex;
+    }
+
+    /**
+     * @param pageSize
+     * @return
+     */
+    public $!{table.getParamClassName()} setPageSize(int pageSize) {
+        this.pageSize = pageSize < 1 ? 10 : pageSize;
+        this.pageIndex = pageStart < 1 ? 0 : (pageStart - 1) * this.pageSize;
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    /**
+     * @param pageStart
+     * @return
+     */
+    public $!{table.getParamClassName()} setPageStart(int pageStart) {
+        this.pageStart = pageStart < 1 ? 1 : pageStart;
+        this.pageIndex = (this.pageStart - 1) * this.pageSize;
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public int getPageStart() {
+        return pageStart;
+    }
+
+    /**
+     * @param pageStart
+     * @param pageSize
+     */
+    public void setPagination(int pageStart, int pageSize) {
+        this.page = true;
+        this.pageSize = pageSize < 1 ? 10 : pageSize;
+        this.pageIndex = pageStart < 1 ? 0 : (pageStart - 1) * this.pageSize;
+    }
+
+    /**
+     * @param condition
+     * @return
+     */
+    public $!{table.getParamClassName()} appendDistinct(OrderCondition condition) {
+        if (null != distinctSql){
+            distinctSql = distinctSql + ", " + condition.getColumnName();
+        } else {
+            distinctSql = condition.getColumnName();
+        }
+        return this;
+    }
+
+    /**
+     * @return
+     */
+    public List<Criteria> getOrderCriteria() {
+        return orderCriteria;
+    }
+
+    /**
+     * @param criteria
+     */
+    public void or(Criteria criteria) {
+        orderCriteria.add(criteria);
+    }
+
+    /**
+     * @return
+     */
+    public Criteria or() {
+        Criteria criteria = createCriteriaInternal();
+        orderCriteria.add(criteria);
+        return criteria;
+    }
+
+    /**
+     * @return
+     */
+    public Criteria createCriteria() {
+        Criteria criteria = createCriteriaInternal();
+        if (orderCriteria.size() == 0) {
+            orderCriteria.add(criteria);
+        }
+        return criteria;
+    }
+
+    /**
+     * @return
+     */
+    protected Criteria createCriteriaInternal() {
+        Criteria criteria = new Criteria();
+        return criteria;
+    }
+
+    /**
+     *
+     */
+    public void clear() {
+        orderCriteria.clear();
+        orderByClause = null;
+        distinct = false;
+    }
+
+    /**
+     *
+     */
+    protected abstract static class AbstractGeneratedCriteria {
+        protected List<Criterion> criteria;
+
+        protected AbstractGeneratedCriteria() {
+            super();
+            criteria = new ArrayList<Criterion>();
+        }
+
+        public boolean isValid() {
+            return criteria.size() > 0;
+        }
+
+        public List<Criterion> getAllCriteria() {
+            return criteria;
+        }
+
+        public List<Criterion> getCriteria() {
+            return criteria;
+        }
+
+        protected void addCriterion(String condition) {
+            if (condition == null) {
+                throw new RuntimeException("Value for condition cannot be null");
+            }
+            criteria.add(new Criterion(condition));
+        }
+
+        protected void addCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            criteria.add(new Criterion(condition, value));
+        }
+
+        protected void addCriterion(String condition, Object value1, Object value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            criteria.add(new Criterion(condition, value1, value2));
+        }
+
+#foreach($column in $table.getColumns())
+        public Criteria and$!{column.getUpperPropertyName()}IsNull() {
+            addCriterion("$!{column.getName()} is null");
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}IsNotNull() {
+            addCriterion("$!{column.getName()} is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}EqualTo($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} =", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}NotEqualTo($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} <>", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}GreaterThan($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} >", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}GreaterThanOrEqualTo($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} >=", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}LessThan($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} <", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}LessThanOrEqualTo($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} <=", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}In(List<$!{column.getPropertyType()}> values) {
+            if(values != null && !values.isEmpty()){
+                addCriterion("$!{column.getName()} in", values, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}NotIn(List<$!{column.getPropertyType()}> values) {
+            if(values != null && !values.isEmpty()){
+                addCriterion("$!{column.getName()} not in", values, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}Between($!{column.getPropertyType()} value1, $!{column.getPropertyType()} value2) {
+            if(value1 != null && value2 != null){
+                addCriterion("$!{column.getName()} between", value1, value2, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}NotBetween($!{column.getPropertyType()} value1, $!{column.getPropertyType()} value2) {
+            if(value1 != null && value2 != null){
+                addCriterion("$!{column.getName()} not between", value1, value2, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+#if($column.getPropertyType() == "String")
+
+        public Criteria and$!{column.getUpperPropertyName()}Like($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} like", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+
+        public Criteria and$!{column.getUpperPropertyName()}NotLike($!{column.getPropertyType()} value) {
+            if(value != null){
+                addCriterion("$!{column.getName()} not like", value, "$!{column.getPropertyName()}");
+            }
+            return (Criteria) this;
+        }
+#end
+#end
+    }
+
+    /**
+     *
+     */
+    public static class Criteria extends AbstractGeneratedCriteria {
+
+        protected Criteria() {
+            super();
+        }
+    }
+
+    /**
+     *
+     */
+    public static class Criterion {
+        private String condition;
+
+        private Object value;
+
+        private Object secondValue;
+
+        private boolean noValue;
+
+        private boolean singleValue;
+
+        private boolean betweenValue;
+
+        private boolean listValue;
+
+        private String typeHandler;
+
+        public String getCondition() {
+            return condition;
+        }
+
+        public Object getValue() {
+            return value;
+        }
+
+        public Object getSecondValue() {
+            return secondValue;
+        }
+
+        public boolean isNoValue() {
+            return noValue;
+        }
+
+        public boolean isSingleValue() {
+            return singleValue;
+        }
+
+        public boolean isBetweenValue() {
+            return betweenValue;
+        }
+
+        public boolean isListValue() {
+            return listValue;
+        }
+
+        public String getTypeHandler() {
+            return typeHandler;
+        }
+
+        protected Criterion(String condition) {
+            super();
+            this.condition = condition;
+            this.typeHandler = null;
+            this.noValue = true;
+        }
+
+        protected Criterion(String condition, Object value, String typeHandler) {
+            super();
+            this.condition = condition;
+            this.value = value;
+            this.typeHandler = typeHandler;
+            if (value instanceof List<?>) {
+                this.listValue = true;
+            } else {
+                this.singleValue = true;
+            }
+        }
+
+        protected Criterion(String condition, Object value) {
+            this(condition, value, null);
+        }
+
+        protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {
+            super();
+            this.condition = condition;
+            this.value = value;
+            this.secondValue = secondValue;
+            this.typeHandler = typeHandler;
+            this.betweenValue = true;
+        }
+
+        protected Criterion(String condition, Object value, Object secondValue) {
+            this(condition, value, secondValue, null);
+        }
+    }
+
+    /**
+     *
+     */
+    public enum OrderCondition {
+    #foreach($column in $table.getColumns())
+        /**
+         * $!{column.getRemarks()}
+         */
+        $!{column.getName().toUpperCase()}("$!{column.getName()}"),
+    #end
+        ;
+
+        private String columnName;
+
+        OrderCondition(String columnName) {
+            this.columnName = columnName;
+        }
+
+        public String getColumnName() {
+            return columnName;
+        }
+
+        public static OrderCondition getEnumByName(String name) {
+            return Arrays.stream(values())
+                     .filter(item -> item.name().equalsIgnoreCase(name))
+                     .findFirst()
+                     .orElseThrow(() -> new RuntimeException("OrderCondition of " + name + " enum not exist"));
+        }
+
+        @Override
+        public String toString() {
+            return columnName;
+        }
+    }
+
+    /**
+     *
+     */
+    public enum SortType {
+        /**
+         * 升序
+         */
+        ASC("asc"),
+        /**
+         * 降序
+         */
+        DESC("desc");
+
+        private String value;
+
+        SortType(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public static SortType getEnumByName(String name) {
+            return Arrays.stream(values())
+                    .filter(item -> item.name().equalsIgnoreCase(name))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("SortType of " + name + " enum not exist"));
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
+}

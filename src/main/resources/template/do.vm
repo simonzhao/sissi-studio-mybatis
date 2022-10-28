@@ -1,0 +1,39 @@
+package $!{table.getDomainObjectPackageName()};
+
+#foreach($column in $columnPackageList)
+import $!{column};
+#end
+import lombok.Getter;
+import lombok.Setter;
+
+/**
+ * 本类通过 Sissi Studio Mybatis Generator 生成
+ * @author sissi.generator  
+ */
+public class $!{table.getDomainObjectName()} {
+#foreach($column in $table.getColumns())
+    /**
+     * Database Column Remarks:
+     *  $!{column.getRemarks()}
+     */
+    @Getter
+    @Setter
+    private $!{column.getPropertyType()} $!{column.getPropertyName()};
+
+#end
+    /**
+     * @return
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+#foreach($column in $table.getColumns())
+        sb.append(", $!{column.getPropertyName()}=").append($!{column.getPropertyName()});
+#end
+        sb.append("]");
+        return sb.toString();
+    }
+}
