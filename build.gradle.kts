@@ -1,6 +1,6 @@
 plugins {
 	id("java")
-	id("org.jetbrains.intellij") version "1.8.0"
+	id("org.jetbrains.intellij") version "1.5.2"
 }
 
 group = "com.messycode.scenicspot.beijingolympicpack"
@@ -11,7 +11,7 @@ repositories {
 }
 
 intellij {
-	version.set("2021.3.3")
+	version.set("2021.2")
 	type.set("IC")
 
 	plugins.set(listOf("com.intellij.java"))
@@ -30,10 +30,10 @@ tasks {
 	}
 
 	patchPluginXml {
-		sinceBuild.set("213")
-		untilbuild.set("223.*")
+		sinceBuild.set("212")
+		untilBuild.set("222.*")
 	}
-	
+
 	signPlugin {
 		certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
 		privateKey.set(System.getenv("PRIVATE_KEY"))
@@ -41,5 +41,6 @@ tasks {
 	}
 
 	publishPlugin {
+		token.set(System.getenv("PUBLISH_TOKEN"))
 	}
 }

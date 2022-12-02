@@ -1,7 +1,7 @@
 package cn.messycode.scenicspot.beijingolympicpack.entity; 
 
 import cn.messycode.scenicspot.beijingolympicpack.Application;
-import cn.messycode.scenicspot.beijingolympicpack.Settings;
+import cn.messycode.scenicspot.beijingolympicpack.util.ConfigUtil;
 import cn.messycode.scenicspot.beijingolympicpack.util.VelocityUtil;
 import cn.messycode.scenicspot.beijingolympicpack.constant.ConfigConstant;
 import cn.messycode.scenicspot.beijingolympicpack.util.TemplateUtil;
@@ -37,15 +37,21 @@ public class TableEntity {
 
     private final Application application = new Application();
 
-    private final Settings settings = Settings.getInstance();
-
     private final TemplateUtil templateUtil = new TemplateUtil();
+
+    private Project project;
+
+    private ConfigUtil configUtil;
 
     private TableEntity(String name, String comment, DatabaseEntity database){
         this.name = name;
         this.comment = comment;
         this.database = database;
         this.columns = new ArrayList<>();
+
+        Project[] projects = ProjectManager.getInstance().getOpenProjects();
+        project = projects[0];
+        configUtil = ConfigUtil.getInstance(project);
     }
 
     public static TableEntity getInstance(String name, String comment, DatabaseEntity database){
@@ -72,9 +78,9 @@ public class TableEntity {
         this.columns.add(column);
     }
 
-    public void build(){
-        String username = settings.getSettingMap().getOrDefault("username", "");
-        String password = settings.getSettingMap().getOrDefault("password", "");
+    public void build(Project project){
+        String username = configUtil.getOrDefault(ConfigConstant.USERNAME, "");
+        String password = configUtil.getOrDefault(ConfigConstant.PASSWORD, "");
 
         application.loadTableColumns(this, username, password);
 
@@ -87,7 +93,7 @@ public class TableEntity {
                 .distinct()
                 .collect(Collectors.toList()));
 
-        String moduleName = settings.getSettingMap().getOrDefault(ConfigConstant.SELECTED_MODULE, "");
+        String moduleName = configUtil.getOrDefault(ConfigConstant.SELECTED_MODULE, "");
         Optional<Module> optional = getCurrentModule(moduleName);
 
         if(optional.isPresent()) {
@@ -110,12 +116,6 @@ public class TableEntity {
     }
 
     private Optional<Module> getCurrentModule(String moduleName){
-        Project[] projects = ProjectManager.getInstance().getOpenProjects();
-        if (projects.length == 0) {
-            return Optional.empty();
-        }
-        Project project = projects[0];
-
         Module[] modules = ModuleManager.getInstance(project).getModules();
         for (Module module : modules) {
             if(module.getName().equalsIgnoreCase(moduleName)){
@@ -126,16 +126,16 @@ public class TableEntity {
     }
 
     private void makeXml(String rootPath, Map<String, Object> context){
-        if(settings.getSettingMap().containsKey(ConfigConstant.XML_PATH)) {
+        if(configUtil.get(ConfigConstant.XML_PATH).isPresent()) {
             String path = rootPath + "/src/main/resources";
-            String route = settings.getSettingMap().get(ConfigConstant.XML_PATH);
+            String route = configUtil.get(ConfigConstant.XML_PATH).get();
             String localPath = path + "/" + route;
             makeContentFile(localPath, this.getMapperFileName(), context, "/template/mapper.vm");
         }
     }
 
     private void makeDomainObjectFile(String rootPath, Map<String, Object> context) {
-        if(settings.getSettingMap().containsKey(ConfigConstant.ENTITY_PACKAGE)) {
+        if(configUtil.get(ConfigConstant.ENTITY_PACKAGE).isPresent()) {
             String path = rootPath + "/src/main/java";
             String route = getDomainObjectPackageName().replace(".", "/");
             String localPath = path + "/" + route;
@@ -144,7 +144,7 @@ public class TableEntity {
     }
 
     private void makeInterfaceFile(String rootPath, Map<String, Object> context) {
-        if(settings.getSettingMap().containsKey(ConfigConstant.INTERFACE_PACKAGE)) {
+        if(configUtil.get(ConfigConstant.INTERFACE_PACKAGE).isPresent()) {
             String path = rootPath + "/src/main/java";
             String route = getInterfacePackageName().replace(".", "/");
             String localPath = path + "/" + route;
@@ -152,7 +152,7 @@ public class TableEntity {
         }
     }
     private void makeParamFile(String rootPath, Map<String, Object> context) {
-        if(settings.getSettingMap().containsKey(ConfigConstant.PARAM_PACKAGE)) {
+        if(configUtil.get(ConfigConstant.PARAM_PACKAGE).isPresent()) {
             String path = rootPath + "/src/main/java";
             String route = getParamClassPackageName().replace(".", "/");
             String localPath = path + "/" + route;
@@ -196,7 +196,7 @@ public class TableEntity {
     }
 
     public String getInterfacePackageName() {
-        return settings.getSettingMap().get(ConfigConstant.INTERFACE_PACKAGE);
+        return configUtil.get(ConfigConstant.INTERFACE_PACKAGE).orElse("");
     }
 
     public String getInterfaceFileName() {
@@ -208,7 +208,7 @@ public class TableEntity {
     }
 
     public String getDomainObjectPackageName() {
-        return settings.getSettingMap().get(ConfigConstant.ENTITY_PACKAGE);
+        return configUtil.get(ConfigConstant.ENTITY_PACKAGE).orElse("");
     }
 
     public String getDomainObjectFileName() {
@@ -228,11 +228,11 @@ public class TableEntity {
     }
 
     public String getFullParamName() {
-        return getDomainObjectPackageName() + "." + getParamClassName();
+        return getParamClassPackageName() + "." + getParamClassName();
     }
 
     public String getParamClassPackageName() {
-        return settings.getSettingMap().get(ConfigConstant.PARAM_PACKAGE);
+        return configUtil.getOrDefault(ConfigConstant.PARAM_PACKAGE, "");
     }
 
     public String getFullDomainObjectName() {

@@ -1,7 +1,7 @@
 package cn.messycode.scenicspot.beijingolympicpack.ui; 
 
 import cn.messycode.scenicspot.beijingolympicpack.constant.ConfigConstant;
-import cn.messycode.scenicspot.beijingolympicpack.Settings;
+import cn.messycode.scenicspot.beijingolympicpack.util.ConfigUtil;
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleManager;
@@ -11,7 +11,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.util.NlsContexts;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
@@ -26,8 +25,6 @@ import java.util.Map;
  */
 public class PathSettingPanel implements Configurable, Configurable.Composite {
 
-    private Settings settings = Settings.getInstance();
-
     private JComboBox<String> selectedModule;
     private JPanel mainPanel;
     private JTextField interfacePackage;
@@ -41,12 +38,16 @@ public class PathSettingPanel implements Configurable, Configurable.Composite {
 
     private Map<String, Module> moduleMap = new HashMap<>();
 
+    private ConfigUtil configUtil;
+
     public PathSettingPanel() {
         Project[] projects = ProjectManager.getInstance().getOpenProjects();
         if (projects.length == 0) {
             return;
         }
         Project project = projects[0];
+
+        configUtil = ConfigUtil.getInstance(project);
 
         Module[] modules = ModuleManager.getInstance(project).getModules();
         for (Module module : modules) {
@@ -55,7 +56,7 @@ public class PathSettingPanel implements Configurable, Configurable.Composite {
             moduleMap.put(moduleName, module);
         }
 
-        final String[] current = {selectedModule.getSelectedItem().toString()};
+        final String[] current = {getSelectedItemName(selectedModule, "")};
         selectedModule.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(ItemEvent e) {
@@ -122,51 +123,59 @@ public class PathSettingPanel implements Configurable, Configurable.Composite {
 
     @Override
     public boolean isModified() {
-        String origSetting = settings.getSettingMap().getOrDefault(ConfigConstant.SELECTED_MODULE, "");
-        String newSetting = selectedModule.getSelectedItem() != null ? selectedModule.getSelectedItem().toString() : "";
+        String origSetting = configUtil.get(ConfigConstant.SELECTED_MODULE).orElse( "");
+        String newSetting = getSelectedItemName(selectedModule, "");
         if(!origSetting.equals(newSetting)){
             return true;
         }
 
-        origSetting = settings.getSettingMap().getOrDefault(ConfigConstant.INTERFACE_PACKAGE, "");
+        origSetting = configUtil.get(ConfigConstant.INTERFACE_PACKAGE).orElse("");
         newSetting = interfacePackage.getText();
         if(!origSetting.equals(newSetting)){
             return true;
         }
 
-        origSetting = settings.getSettingMap().getOrDefault(ConfigConstant.ENTITY_PACKAGE, "");
+        origSetting = configUtil.get(ConfigConstant.ENTITY_PACKAGE).orElse("");
         newSetting = entityPackage.getText();
         if(!origSetting.equals(newSetting)){
             return true;
         }
 
-        origSetting = settings.getSettingMap().getOrDefault(ConfigConstant.PARAM_PACKAGE, "");
+        origSetting = configUtil.get(ConfigConstant.PARAM_PACKAGE).orElse("");
         newSetting = paramPackage.getText();
         if(!origSetting.equals(newSetting)){
             return true;
         }
 
-        origSetting = settings.getSettingMap().getOrDefault(ConfigConstant.XML_PATH, "");
+        origSetting = configUtil.get(ConfigConstant.XML_PATH).orElse("");
         newSetting = xmlPath.getText();
         return !origSetting.equals(newSetting);
     }
 
     @Override
     public void apply() throws ConfigurationException {
+        /*
         settings.getSettingMap().put(ConfigConstant.SELECTED_MODULE, selectedModule.getSelectedItem().toString());
         settings.getSettingMap().put(ConfigConstant.INTERFACE_PACKAGE, interfacePackage.getText());
         settings.getSettingMap().put(ConfigConstant.ENTITY_PACKAGE, entityPackage.getText());
         settings.getSettingMap().put(ConfigConstant.PARAM_PACKAGE, paramPackage.getText());
         settings.getSettingMap().put(ConfigConstant.XML_PATH, xmlPath.getText());
+         */
+        configUtil.set(ConfigConstant.SELECTED_MODULE, getSelectedItemName(selectedModule, ""));
+        configUtil.set(ConfigConstant.INTERFACE_PACKAGE, interfacePackage.getText());
+        configUtil.set(ConfigConstant.ENTITY_PACKAGE, entityPackage.getText());
+        configUtil.set(ConfigConstant.PARAM_PACKAGE, paramPackage.getText());
+        configUtil.set(ConfigConstant.XML_PATH, xmlPath.getText());
 
     }
 
     @Override
-    public Configurable @NotNull [] getConfigurables() {
+    public Configurable[] getConfigurables() {
         return new Configurable[0];
     }
 
     private void init(){
+        /*
         this.settings = Settings.getInstance();
 
         selectedModule.setSelectedItem(settings.getSettingMap().get(ConfigConstant.SELECTED_MODULE));
@@ -174,11 +183,21 @@ public class PathSettingPanel implements Configurable, Configurable.Composite {
         entityPackage.setText(settings.getSettingMap().get(ConfigConstant.ENTITY_PACKAGE));
         paramPackage.setText(settings.getSettingMap().get(ConfigConstant.PARAM_PACKAGE));
         xmlPath.setText(settings.getSettingMap().get(ConfigConstant.XML_PATH));
+         */
+        selectedModule.setSelectedItem(configUtil.get(ConfigConstant.SELECTED_MODULE).orElse(""));
+        interfacePackage.setText(configUtil.get(ConfigConstant.INTERFACE_PACKAGE).orElse(""));
+        entityPackage.setText(configUtil.get(ConfigConstant.ENTITY_PACKAGE).orElse(""));
+        paramPackage.setText(configUtil.get(ConfigConstant.PARAM_PACKAGE).orElse(""));
+        xmlPath.setText(configUtil.get(ConfigConstant.XML_PATH).orElse(""));
     }
 
     @Override
     public void reset() {
         init();
+    }
+
+    private String getSelectedItemName(JComboBox<String> selectedModule, String defaultVal){
+        return selectedModule.getSelectedItem() != null ? selectedModule.getSelectedItem().toString() : defaultVal;
     }
 }
 

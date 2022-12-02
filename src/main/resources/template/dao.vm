@@ -50,7 +50,7 @@ public interface $!{table.getInterfaceName()}{
     int insertSelective($!{doClassName} record);
 
     /**
-     * 根据WHERE条件查询，返回不包含长文本字段
+     * 根据WHERE条件查询
      * @param $!{paramName}
      * @return
      */
@@ -72,7 +72,7 @@ public interface $!{table.getInterfaceName()}{
     int updateByParamSelective(@Param("record") $!{doClassName} record, @Param("$!{paramName}") $!{paramClassName} $!{paramName});
 
     /**
-     * 根据WHERE条件更新，不更新长文本字段
+     * 根据WHERE条件更新
      * @param record
      * @param $!{paramName}
      * @return
@@ -87,7 +87,7 @@ public interface $!{table.getInterfaceName()}{
     int updateByPrimaryKeySelective($!{doClassName} record);
 
     /**
-     * 根据主键更新，不更新长文本字段
+     * 根据主键更新
      * @param record
      * @return
      */

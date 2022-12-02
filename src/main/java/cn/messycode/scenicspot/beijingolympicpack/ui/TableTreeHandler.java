@@ -1,9 +1,10 @@
 package cn.messycode.scenicspot.beijingolympicpack.ui;
 
 import cn.messycode.scenicspot.beijingolympicpack.Application;
+import cn.messycode.scenicspot.beijingolympicpack.constant.ConfigConstant;
 import cn.messycode.scenicspot.beijingolympicpack.entity.DatabaseEntity;
 import cn.messycode.scenicspot.beijingolympicpack.entity.TableEntity;
-import cn.messycode.scenicspot.beijingolympicpack.Settings;
+import cn.messycode.scenicspot.beijingolympicpack.util.ConfigUtil;
 import cn.messycode.scenicspot.beijingolympicpack.util.ViewUtil;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -20,9 +21,12 @@ import javax.swing.tree.TreePath;
  */
 public class TableTreeHandler {
     private Application application = new Application();
-    private Settings settings = Settings.getInstance();
 
     private JTree tree;
+
+    private Project project;
+
+    private ConfigUtil configUtil;
 
     private static class CustomTreeCellRenderer extends ColoredTreeCellRenderer {
         private Icon tableIcon = ViewUtil.getIcon("/images/table.png");
@@ -49,17 +53,19 @@ public class TableTreeHandler {
 
     private TableTreeHandler(JTree tree, Project project){
         this.tree = tree;
+        this.project = project;
+        this.configUtil = ConfigUtil.getInstance(project);
     }
 
     private synchronized void loadTableNodes() {
         DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
         root.removeAllChildren();
 
-        String databaseName = settings.getSettingMap().getOrDefault("database", "mysql");
-        String host = settings.getSettingMap().getOrDefault("host", "localhost");
-        String port = settings.getSettingMap().getOrDefault("port", "3306");
-        String username = settings.getSettingMap().getOrDefault("username", "");
-        String password = settings.getSettingMap().getOrDefault("password", "");
+        String databaseName = configUtil.getOrDefault(ConfigConstant.DATABASE, "mysql");
+        String host = configUtil.getOrDefault(ConfigConstant.HOST, "localhost");
+        String port = configUtil.getOrDefault(ConfigConstant.PORT, "3306");
+        String username = configUtil.getOrDefault(ConfigConstant.USERNAME, "");
+        String password = configUtil.getOrDefault(ConfigConstant.PASSWORD, "");
 
         DatabaseEntity database = DatabaseEntity.getInstance(databaseName, host, port);
 

@@ -28,8 +28,11 @@ public class DbTableToolWindowPanel extends SimpleToolWindowPanel {
 
     private SimpleTree tree = new SimpleTree();
 
+    private Project project;
+
     public DbTableToolWindowPanel(Project project) {
         super(true, true);
+        this.project = project;
         TableTreeHandler handler = TableTreeHandler.getInstance(tree, project);
         init(handler);
         handler.initData();
@@ -57,7 +60,7 @@ public class DbTableToolWindowPanel extends SimpleToolWindowPanel {
                     Object obj = node.getUserObject();
                     if(obj instanceof TableEntity){
                         TableEntity table = (TableEntity) obj;
-                        table.build();
+                        table.build(project);
                     }
                 }
             }

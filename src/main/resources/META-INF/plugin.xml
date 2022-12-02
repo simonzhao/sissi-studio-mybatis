@@ -1,25 +1,27 @@
 <idea-plugin>
-	<id>cn.messycode.scenicspot.beijingolympicpack</id>
-	<name>Sissi Studio Mybatis Generator</name>
-	<vendor email="sissi.studio@messycode-inc.com" url="www.messycode.cn">messycode.cn</vendor>
-	<description><![CDATA[
+    <id>cn.messycode.scenicspot.beijingolympicpack</id>
+    <name>Sissi Studio Mybatis Generator</name>
+    <vendor email="sissi.studio@messycode-inc.com" url="www.messycode.cn">messycode.cn</vendor>
+    <description><![CDATA[
 	]]></description>
-	
-	<depends>com.intellij.modules.platform</depends>
-	<depends>com.intellij.modules.lang</depends>
-	<depends>com.intellij.modules.java</depends>
 
-	<extensions defaultExtensionNs="com.intellij">
-		<toolWindow id="ConnectUI" seconday="false" anchor="right" factoryClass="cn.messycode.scenicspot.beijingolympicpack.factory.ConnectUiFactory" />
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.java</depends>
 
-		<projectService serviceImplementation="cn.messycode.scenicspot.beijingolympicpack.Settings" />
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Sissi Studio MyBatis" anchor="right"
+                    factoryClass="cn.messycode.scenicspot.beijingolympicpack.factory.ConnectUiFactory"/>
 
-		<projectConfigurable parentId="tools" id="cn.messycode.scenicspot.beijingolympicpack.ui.PathSettingPanel" instance="cn.messycode.scenicspot.beijingolympicpack.ui.PathSettingPanel" dynamic="true" />
-		<projectConfigurable parentId="cn.messycode.scenicspot.beijingolympicpack.ui.PathSettingPanel" id="cn.messycode.scenicspot.beijingolympicpack.ui.ConnectSettingPanel" instance="cn.messycode.scenicspot.beijingolympicpack.ui.PathSettingPanel" dynamic="true" />
+        <projectConfigurable parentId="tools" id="cn.messycode.scenicspot.beijingolympicpack.ui.PathSettingPanel"
+                             instance="cn.messycode.scenicspot.beijingolympicpack.ui.PathSettingPanel" dynamic="true"/>
+        <projectConfigurable parentId="cn.messycode.scenicspot.beijingolympicpack.ui.PathSettingPanel"
+                             id="cn.messycode.scenicspot.beijingolympicpack.ui.ConnectSettingPanel"
+                             instance="cn.messycode.scenicspot.beijingolympicpack.ui.ConnectSettingPanel" dynamic="true"/>
 
-		<notificationGroup id="Custom Notification Group INFORMATION" displayType="BALLOON" />
-        	<notificationGroup id="Custom Notification Group WARNING" displayType="BALLOON" />
-        	<notificationGroup id="Custom Notification Group ERROR" displayType="BALLOON" />
+        <notificationGroup id="Custom Notification Group INFORMATION" displayType="BALLOON"/>
+        <notificationGroup id="Custom Notification Group WARNING" displayType="BALLOON"/>
+        <notificationGroup id="Custom Notification Group ERROR" displayType="BALLOON"/>
 
-	</extensions>
+    </extensions>
 </idea-plugin>
