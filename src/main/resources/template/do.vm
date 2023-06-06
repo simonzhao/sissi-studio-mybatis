@@ -1,0 +1,22 @@
+package $!{table.getDomainObjectPackageName()};
+
+#foreach($column in $columnPackageList)
+import $!{column};
+#end
+import lombok.Data;
+
+/**
+ * 本类通过 Sissi Studio Mybatis Generator 生成
+ * @author sissi.generator  
+ */
+@Data
+public class $!{table.getDomainObjectName()} {
+#foreach($column in $table.getColumns())
+    /**
+     * Database Column Remarks:
+     *  $!{column.getRemarks()}
+     */
+    private $!{column.getPropertyType()} $!{column.getPropertyName()};
+
+#end
+}

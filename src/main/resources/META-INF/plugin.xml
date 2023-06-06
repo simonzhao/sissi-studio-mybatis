@@ -1,0 +1,39 @@
+<idea-plugin>
+    <id>cn.messycode.scenicspot.beijingolympicpack</id>
+    <name>Sissi Studio Mybatis Generator</name>
+    <vendor email="sissi.studio@messycode-inc.com" url="https://www.messycode.cn/product/1gZWWPnIuz0btCtPjzDbK.html">messycode.cn</vendor>
+    <description><![CDATA[
+    这是一个免费的MyBatis代码生成插件，支持MySQL数据库，帮助开发者快速生成MyBatis的xml文件和相应的Java文件。<br />
+    相比其他MyBatis生成插件，使用了java.time.LocalDateTime替换java.util.Date类。<br />
+    生成的代码完全符合阿里巴巴Java代码编程规范。<br />
+    生成的接口包括以下方法：
+    <ul>
+        <li>countByParam</li>
+        <li>deleteByParam</li>
+        <li>deleteByPrimaryKey</li>
+        <li>insert</li>
+        <li>insertSelective</li>
+        <li>selectByParam</li>
+        <li>selectByPrimaryKey</li>
+        <li>updateByParamSelective</li>
+        <li>updateByParam</li>
+        <li>updateByPrimaryKeySelective</li>
+        <li>updateByPrimaryKey</li>
+        <li>batchInsert</li>
+    </ul>
+	]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.lang</depends>
+    <depends>com.intellij.modules.java</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Sissi Studio MyBatis" anchor="right"
+                    factoryClass="cn.messycode.scenicspot.beijingolympicpack.factory.ConnectUiFactory"/>
+
+        <notificationGroup id="Custom Notification Group INFORMATION" displayType="BALLOON"/>
+        <notificationGroup id="Custom Notification Group WARNING" displayType="BALLOON"/>
+        <notificationGroup id="Custom Notification Group ERROR" displayType="BALLOON"/>
+
+    </extensions>
+</idea-plugin>
