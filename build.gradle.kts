@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.messycode.scenicspot.beijingolympicpack"
-version = "0.1.6"
+version = "0.1.7"
 
 repositories {
 	mavenCentral()
@@ -31,7 +31,7 @@ tasks {
 
 	patchPluginXml {
 		sinceBuild.set("212")
-		untilBuild.set("222.*")
+		untilBuild.set("231.*")
 	}
 
 	signPlugin {
